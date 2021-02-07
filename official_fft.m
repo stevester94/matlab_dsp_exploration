@@ -15,8 +15,8 @@ ylabel('X(t)')
 
 Y = fft(X);
 
-% The ouput of FFT is complex. I=Magnitude, Q=Phase. We take the abs of the
-% FFT in order to get the magnitude. WHY DONT WE JUST TAKE I
+% The ouput of FFT are complex sinusoids. What exactly this means I am not
+% sure. But get the magnitude of each point using abs();
 P2 = abs(Y);
 
 % The output is scaled by the length of the input signal, so we have to
@@ -26,7 +26,8 @@ P2 = P2/L;
 % The fft is mirrored across its midpoint, so we drop the second half
 P1 = P2(1:L/2+1);
 
-% Double it, I ASSUME DUE TO US DROPPING HALF THE FFT
+% Double it, because reasons.
+%
 P1(2:end-1) = 2*P1(2:end-1);
 
 % The frequency axis. We have L/2 bins, and Fs/2 Hz spread across them. So
