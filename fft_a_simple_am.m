@@ -6,14 +6,20 @@ t = [0:1/Fs:duration_secs];
 amp_carrier = 20;
 freq_carrier = 4500;
 target_modulation_index = 1;
-freq_m = 5;
+
+freq_m = 200; % Results in sidebands at 4300 and 4700!
 amp_m = 2;
+
 m = (amp_m) .* sin(2*pi*t .* freq_m);
 modulation_index = max(m) / amp_carrier;
 m = m ./ (modulation_index/target_modulation_index);
 x = (amp_carrier + m) .* sin(2 * pi * freq_carrier * t);
 
-tiledlayout(5,1);
+tiledlayout(3,1);
+
+nexttile;
+plot(m);
+
 nexttile;
 plot(x);
 
