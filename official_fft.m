@@ -1,9 +1,10 @@
-Fs = 2000;            % Sampling frequency                    
+Fs = 500;            % Sampling frequency                    
 T = 1/Fs;             % Sampling period
-L = 5000;             % Length of signal
-t = (0:L-1)*T;        % Time vector
+duration_secs = 10;
+t = (0:T:duration_secs);        % Time vector
+L = numel(t);
 
-S = 0.7*sin(2*pi*50*t) + sin(2*pi*120*t);
+S = 0.7*sin(2*pi*50*t) + sin(2*pi*120*t) + 5;
 X = S;
 
 figure(1);
@@ -14,12 +15,24 @@ ylabel('X(t)')
 
 Y = fft(X);
 
-P2 = abs(Y/L);
+% The ouput of FFT is complex. I=Magnitude, Q=Phase. We take the abs of the
+% FFT in order to get the magnitude. WHY DONT WE JUST TAKE I
+P2 = abs(Y);
+
+% The output is scaled by the length of the input signal, so we have to
+% normalize it.
+P2 = P2/L;
+
+% The fft is mirrored across its midpoint, so we drop the second half
 P1 = P2(1:L/2+1);
+
+% Double it, I ASSUME DUE TO US DROPPING HALF THE FFT
 P1(2:end-1) = 2*P1(2:end-1);
 
+% The frequency axis. We have L/2 bins, and Fs/2 Hz spread across them. So
+% that is (Fs/2)/(L/2) Hz per Bin = Fs/L Hz Per Bin
+f = Fs/L*(0:(L/2));
 figure(2);
-f = Fs*(0:(L/2))/L;
 plot(f,P1) 
 title('Single-Sided Amplitude Spectrum of X(t)')
 xlabel('f (Hz)')
